@@ -40,6 +40,17 @@ let driver
    'Accept':'application/json'
  };
 
+ const desiredCaps = {
+  sessionName:        'Automation test session',
+  sessionDescription: 'This is an example for Android app',
+  deviceOrientation:  'portrait',
+  captureScreenshots: true,
+  deviceGroup:        'KOBITON',
+  deviceName:         deviceName,
+  platformName:       'Android',
+  automationName: 'UiAutomator2'
+}
+
 if (!username || !apiKey) {
   console.log('Error: Environment variables KOBITON_USERNAME and KOBITON_API_KEY are required to execute script')
   process.exit(1)
@@ -116,18 +127,8 @@ describe('Android App sample',() => {
       })
     })
 
-    const app_id = createAppVersion.appId
-
-    const desiredCaps = {
-      sessionName:        'Automation test session',
-      sessionDescription: 'This is an example for Android app',
-      deviceOrientation:  'portrait',
-      captureScreenshots: true,
-      deviceGroup:        'KOBITON',
-      deviceName:         deviceName,
-      platformName:       'Android',
-      app: `kobiton-store:${app_id}`,
-      automationName: 'UiAutomator2'
+    if (createAppVersion.appId) {
+      desiredCaps.app = `kobiton-store:${createAppVersion.appId}`
     }
 
     await new Promise((resolve) => setTimeout(resolve, 10000))
