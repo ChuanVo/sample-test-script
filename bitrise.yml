@@ -26,7 +26,7 @@ workflows:
             #!/bin/bash
             set -ex
             echo "$BITRISE_SOURCE_DIR"
-            echo "=>>>>>>>>>>>>>>>>>>>>>  ${FILE_PATH}"
+            echo "=>>>>>>>>>>>>>>>>>>>>>  $FILE_PATH"
             npm install
             npm run android-app-test
 
