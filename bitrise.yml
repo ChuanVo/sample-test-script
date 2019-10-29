@@ -1,0 +1,36 @@
+format_version: 1.1.0
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+app:
+  envs:
+  - FILE_PATH: ${BITRISE_APK_PATH}
+  - SOURCE_APP_DIR: "${BITRISE_DEPLOY_DIR}"
+  - SOURCE_JAVASCRIPT_TEST: "./javascript"
+trigger_map:
+- workflow: primary
+  push_branch: "*"
+- workflow: primary
+  pull_request_source_branch: "*"
+  pull_request_target_branch: "*"
+workflows:
+  primary:
+    steps:
+    - git-clone@4.0.17: {}
+    
+    - change-workdir:
+        title: Change directory to a temporary directory
+        is_always_run: true
+        inputs:
+        - path: "$SOURCE_JAVASCRIPT_TEST"
+    - script@1.1.5:
+        inputs:
+        - content: |
+            #!/bin/bash
+            set -ex
+            echo "$BITRISE_SOURCE_DIR"
+            echo "=>>>>>>>>>>>>>>>>>>>>>  ${FILE_PATH}"
+            npm install
+            npm run android-app-test
+
+meta:
+  bitrise.io:
+    machine_type: performance
