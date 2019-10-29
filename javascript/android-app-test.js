@@ -9,12 +9,12 @@ import btoa from 'btoa'
 
 
 
-// const username = process.env.KOBITON_USERNAME
-// const apiKey = process.env.KOBITON_API_KEY
 const username = 'chuanvo'
 const apiKey = '8b75feca-91b9-4245-9814-72eda11815f7'
-const deviceName = process.env.KOBITON_DEVICE_NAME || 'Galaxy*'
 
+// const username = process.env.KOBITON_USERNAME
+// const apiKey = process.env.KOBITON_API_KEY
+const deviceName = process.env.KOBITON_DEVICE_NAME || 'Galaxy*'
 
 const kobitonServerConfig = {
   protocol: 'https',
@@ -22,25 +22,7 @@ const kobitonServerConfig = {
   auth: `${username}:${apiKey}`
 }
 
-let driver
-
-  /* 
-  - filePath is the path to install app file, which is generated after buid step.
-  */ 
- const filePath = process.env.BITRISE_APK_PATH
- const stats = fs.statSync(filePath);
- const fileName = path.parse(filePath).base
-   const inputBody = {
-   'filename': fileName
-   };
- const base64EncodedBasicAuth = btoa(`${username}:${apiKey}`);
- const headers = {
-   'Authorization': `Basic ${base64EncodedBasicAuth}`,
-   'Content-Type':'application/json',
-   'Accept':'application/json'
- };
-
- const desiredCaps = {
+const desiredCaps = {
   sessionName:        'Automation test session',
   sessionDescription: 'This is an example for Android app',
   deviceOrientation:  'portrait',
@@ -51,14 +33,30 @@ let driver
   automationName: 'UiAutomator2'
 }
 
+let driver
+
 if (!username || !apiKey) {
   console.log('Error: Environment variables KOBITON_USERNAME and KOBITON_API_KEY are required to execute script')
   process.exit(1)
 }
 
-describe('Android App sample',() => {
-  before(async () => {
+/* 
+- filePath is the path to install app file, which is generated after buid step.
+*/ 
+const filePath = process.env.BITRISE_APK_PATH
+const stats = fs.statSync(filePath);
+const fileName = path.parse(filePath).base
+  const inputBody = {
+  'filename': fileName
+  };
+const base64EncodedBasicAuth = btoa(`${username}:${apiKey}`)
+const headers = {
+  'Authorization': `Basic ${base64EncodedBasicAuth}`,
+  'Content-Type':'application/json',
+  'Accept':'application/json'
+}
 
+const uploadApp = () => {
   try {
     console.log('Step 1: Generate Upload URL')
     const getUrl = await new Promise((resolve, reject) => {
@@ -137,6 +135,12 @@ describe('Android App sample',() => {
   catch (error) {
       console.log('ERROR', error)
   }
+}
+
+describe('Android App sample',() => {
+  before(async () => {
+
+  uploadApp()
 
   driver = wd.promiseChainRemote(kobitonServerConfig)
 
