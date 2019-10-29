@@ -15,6 +15,7 @@ const username = 'chuanvo'
 const apiKey = '8b75feca-91b9-4245-9814-72eda11815f7'
 const deviceName = process.env.KOBITON_DEVICE_NAME || 'Galaxy*'
 
+
 const kobitonServerConfig = {
   protocol: 'https',
   host: 'api-test.kobiton.com',
@@ -22,6 +23,22 @@ const kobitonServerConfig = {
 }
 
 let driver
+
+  /* 
+  - filePath is the path to install app file, which is generated after buid step.
+  */ 
+ const filePath = process.env.BITRISE_APK_PATH
+ const stats = fs.statSync(filePath);
+ const fileName = path.parse(filePath).base
+   const inputBody = {
+   'filename': fileName
+   };
+ const base64EncodedBasicAuth = btoa(`${username}:${apiKey}`);
+ const headers = {
+   'Authorization': `Basic ${base64EncodedBasicAuth}`,
+   'Content-Type':'application/json',
+   'Accept':'application/json'
+ };
 
 if (!username || !apiKey) {
   console.log('Error: Environment variables KOBITON_USERNAME and KOBITON_API_KEY are required to execute script')
@@ -31,20 +48,8 @@ if (!username || !apiKey) {
 describe('Android App sample',() => {
   before(async () => {
 
-  const filePath = process.env.BITRISE_APK_PATH
-  const stats = fs.statSync(filePath);
-  const fileName = path.parse(filePath).base
-    const inputBody = {
-    'filename': fileName
-    };
-  const base64EncodedBasicAuth = btoa(`${username}:${apiKey}`);
-  const headers = {
-    'Authorization': `Basic ${base64EncodedBasicAuth}`,
-    'Content-Type':'application/json',
-    'Accept':'application/json'
-  };
-
   try {
+    console.log('Step 1: Generate Upload URL')
     const getUrl = await new Promise((resolve, reject) => {
       request({
         url: 'https://api-test.kobiton.com/v1/apps/uploadUrl',
@@ -52,14 +57,20 @@ describe('Android App sample',() => {
         method: 'POST',
         body: inputBody,
         headers: headers
-      }, function (err, res, body) {
-        if (err || res.statusCode != 200) {
-          return reject(err);
+      }, function (err, response, body) {
+        
+        if (err || response.statusCode != 200) {
+          console.log(err)
+          return reject(err)
+        
         }
-        resolve(body);
+        console.log('Response body:', body)
+        console.log('Uploading...')
+        resolve(body)
       })
     })
 
+    console.log('Step 2: Upload File To S3')
     await new Promise((resolve, reject) => {
       fs.createReadStream(filePath).pipe(
           request({
@@ -72,14 +83,17 @@ describe('Android App sample',() => {
               }
           },
           function (err, res, body) {
-              if(err){
-                  return reject(err);
-              }
-              resolve(body)
+            if (err) {
+              console.log('Upload file Error', err)
+              return reject(err)
+            }
+            console.log('Create App Version ...')
+            resolve(body)
           })
       );
     })
 
+    console.log('Step 3: Create Application Or Version')
     const createAppVersion = await new Promise((resolve, reject) => {
       request({
           url: 'https://api-test.kobiton.com/v1/apps',
@@ -92,10 +106,13 @@ describe('Android App sample',() => {
           headers: headers
       }, 
       function (err, res, body) {
-          if (err) {
-              return reject(err)
-          }
-          resolve(body)
+        if (err) {
+          console.error('Error:', err)
+          return reject(err)
+        }
+        console.log('Response body:', body)
+        resolve(body)
+        console.log('Done')
       })
     })
 
@@ -115,33 +132,31 @@ describe('Android App sample',() => {
 
     await new Promise((resolve) => setTimeout(resolve, 10000))
 
-    driver = wd.promiseChainRemote(kobitonServerConfig)
-
-    driver.on('status', (info) => {
-      console.log(info.cyan)
-    })
-    driver.on('command', (meth, path, data) => {
-      console.log(' > ' + meth.yellow, path.grey, data || '')
-    })
-    driver.on('http', (meth, path, data) => {
-      console.log(' > ' + meth.magenta, path, (data || '').grey)
-    })
-
-    try {
-      await driver.init(desiredCaps)
-    }
-    catch (err) {
-      if (err.data) {
-        console.error(`init driver: ${err.data}`)
-      }
-    throw err
-    }
-
-
-
   }
   catch (error) {
       console.log('ERROR', error)
+  }
+
+  driver = wd.promiseChainRemote(kobitonServerConfig)
+
+  driver.on('status', (info) => {
+    console.log(info.cyan)
+  })
+  driver.on('command', (meth, path, data) => {
+    console.log(' > ' + meth.yellow, path.grey, data || '')
+  })
+  driver.on('http', (meth, path, data) => {
+    console.log(' > ' + meth.magenta, path, (data || '').grey)
+  })
+
+  try {
+    await driver.init(desiredCaps)
+  }
+  catch (err) {
+    if (err.data) {
+      console.error(`init driver: ${err.data}`)
+    }
+  throw err
   }
 
 
