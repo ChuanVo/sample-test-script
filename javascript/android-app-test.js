@@ -23,19 +23,6 @@ const kobitonServerConfig = {
 
 let driver
 
-const filePath = process.env.BITRISE_APK_PATH
-const stats = fs.statSync(filePath);
-const fileName = path.parse(filePath).base
-  const inputBody = {
-   'filename': fileName
-  };
-const base64EncodedBasicAuth = btoa(`${username}:${apiKey}`);
-const headers = {
-  'Authorization': `Basic ${base64EncodedBasicAuth}`,
-  'Content-Type':'application/json',
-  'Accept':'application/json'
-};
-
 if (!username || !apiKey) {
   console.log('Error: Environment variables KOBITON_USERNAME and KOBITON_API_KEY are required to execute script')
   process.exit(1)
@@ -43,6 +30,19 @@ if (!username || !apiKey) {
 
 describe('Android App sample',() => {
   before(async () => {
+
+  const filePath = process.env.BITRISE_APK_PATH
+  const stats = fs.statSync(filePath);
+  const fileName = path.parse(filePath).base
+    const inputBody = {
+    'filename': fileName
+    };
+  const base64EncodedBasicAuth = btoa(`${username}:${apiKey}`);
+  const headers = {
+    'Authorization': `Basic ${base64EncodedBasicAuth}`,
+    'Content-Type':'application/json',
+    'Accept':'application/json'
+  };
 
   try {
     const getUrl = await new Promise((resolve, reject) => {
@@ -101,6 +101,17 @@ describe('Android App sample',() => {
 
     const app_id = createAppVersion.appId
 
+    const desiredCaps = {
+      sessionName:        'Automation test session',
+      sessionDescription: 'This is an example for Android app',
+      deviceOrientation:  'portrait',
+      captureScreenshots: true,
+      deviceGroup:        'KOBITON',
+      deviceName:         deviceName,
+      platformName:       'Android',
+      app: `kobiton-store:${app_id}`,
+      automationName: 'UiAutomator2'
+    }
 
     await new Promise((resolve) => setTimeout(resolve, 10000))
 
@@ -115,20 +126,6 @@ describe('Android App sample',() => {
     driver.on('http', (meth, path, data) => {
       console.log(' > ' + meth.magenta, path, (data || '').grey)
     })
-
-    console.log('appppppppp=>>>>>>>', app_id)
-
-    const desiredCaps = {
-      sessionName:        'Automation test session',
-      sessionDescription: 'This is an example for Android app',
-      deviceOrientation:  'portrait',
-      captureScreenshots: true,
-      deviceGroup:        'KOBITON',
-      deviceName:         deviceName,
-      platformName:       'Android',
-      app: `kobiton-store:${app_id}`,
-      automationName: 'UiAutomator2'
-    }
 
     try {
       await driver.init(desiredCaps)
