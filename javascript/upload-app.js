@@ -5,7 +5,7 @@ import btoa from 'btoa'
 
 
 const uploadApp = async (username, apiKey, filePath) => {
-    
+
     const stats = fs.statSync(filePath);
     const fileName = path.parse(filePath).base
     const inputBody = {
@@ -89,9 +89,6 @@ const uploadApp = async (username, apiKey, filePath) => {
         if (createAppVersion.appId) {
             return createAppVersion.appId
         }
-
-        await new Promise((resolve) => setTimeout(resolve, 10000))
-
     }
     catch (error) {
         console.log('ERROR', error)

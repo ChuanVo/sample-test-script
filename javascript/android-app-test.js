@@ -136,8 +136,12 @@ if (!username || !apiKey) {
 
 describe('Android App sample',() => {
   before(async () => {
+  
+  const appId = await uploadApp(username, apiKey, process.env.BITRISE_APK_PATH)
+  desiredCaps.app = `kobiton-store:${appId}`
 
-  desiredCaps.app = `kobiton-store:${uploadApp(username, apiKey, process.env.BITRISE_APK_PATH)}`
+  await new Promise((resolve) => setTimeout(resolve, 5000))
+
 
   driver = wd.promiseChainRemote(kobitonServerConfig)
 
