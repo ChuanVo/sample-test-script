@@ -56,7 +56,7 @@ const headers = {
   'Accept':'application/json'
 }
 
-const uploadApp = () => {
+const uploadApp = async () => {
   try {
     console.log('Step 1: Generate Upload URL')
     const getUrl = await new Promise((resolve, reject) => {
