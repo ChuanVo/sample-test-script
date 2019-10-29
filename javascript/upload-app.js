@@ -5,8 +5,7 @@ import btoa from 'btoa'
 
 
 const uploadApp = async (username, apiKey, filePath) => {
-
-    const filePath = process.env.BITRISE_APK_PATH
+    
     const stats = fs.statSync(filePath);
     const fileName = path.parse(filePath).base
     const inputBody = {
