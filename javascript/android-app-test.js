@@ -127,8 +127,7 @@ describe('Android App sample',() => {
       deviceName:         deviceName,
       platformName:       'Android',
       app: `kobiton-store:${app_id}`,
-      appPackage: 'io.appium.android.apis',
-      appActivity: '.ApiDemos'
+      automationName: 'UiAutomator2'
     }
 
     try {
