@@ -2,8 +2,7 @@ format_version: 1.1.0
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 app:
   envs:
-  - FILE_PATH: ${BITRISE_APK_PATH}
-  - SOURCE_APP_DIR: "${BITRISE_DEPLOY_DIR}"
+  - FILE_PATH: "/bitrise/deploy/app-debug-androidTest.apk"
   - SOURCE_JAVASCRIPT_TEST: "./javascript"
 trigger_map:
 - workflow: primary

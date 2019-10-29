@@ -12,8 +12,8 @@
 6 silly lifecycle kobiton-sample@1.0.0~preandroid-app-test: no script for preandroid-app-test, continuing
 7 info lifecycle kobiton-sample@1.0.0~android-app-test: kobiton-sample@1.0.0
 8 verbose lifecycle kobiton-sample@1.0.0~android-app-test: unsafe-perm in lifecycle true
-9 verbose lifecycle kobiton-sample@1.0.0~android-app-test: PATH: /Users/chuanvo/.nvm/versions/node/v6.17.1/lib/node_modules/npm/bin/node-gyp-bin:/Users/chuanvo/Desktop/Kobiton/bitrise-demo/javascript/node_modules/.bin:/Users/chuanvo/.bitrise/tools:/Users/chuanvo/.nvm/versions/node/v6.17.1/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin
-10 verbose lifecycle kobiton-sample@1.0.0~android-app-test: CWD: /Users/chuanvo/Desktop/Kobiton/bitrise-demo/javascript
+9 verbose lifecycle kobiton-sample@1.0.0~android-app-test: PATH: /Users/chuanvo/.nvm/versions/node/v6.17.1/lib/node_modules/npm/bin/node-gyp-bin:/Users/chuanvo/Desktop/bitrise/sample-test-script/javascript/node_modules/.bin:/Users/chuanvo/.bitrise/tools:/Users/chuanvo/.nvm/versions/node/v6.17.1/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin
+10 verbose lifecycle kobiton-sample@1.0.0~android-app-test: CWD: /Users/chuanvo/Desktop/bitrise/sample-test-script/javascript
 11 silly lifecycle kobiton-sample@1.0.0~android-app-test: Args: [ '-c',
 11 silly lifecycle   'mocha --require babel-core/register --no-timeouts android-app-test.js' ]
 12 silly lifecycle kobiton-sample@1.0.0~android-app-test: Returned: code: 1  signal: null
@@ -29,7 +29,7 @@
 14 verbose stack     at maybeClose (internal/child_process.js:920:16)
 14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:230:5)
 15 verbose pkgid kobiton-sample@1.0.0
-16 verbose cwd /Users/chuanvo/Desktop/Kobiton/bitrise-demo/javascript
+16 verbose cwd /Users/chuanvo/Desktop/bitrise/sample-test-script/javascript
 17 error Darwin 19.0.0
 18 error argv "/Users/chuanvo/.nvm/versions/node/v6.17.1/bin/node" "/Users/chuanvo/.nvm/versions/node/v6.17.1/bin/npm" "run" "android-app-test"
 19 error node v6.17.1
