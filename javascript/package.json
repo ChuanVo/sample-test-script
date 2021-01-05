@@ -41,7 +41,7 @@
     "npm": "^6.1.0",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "wd": "^1.9.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "btoa": "^1.2.1",
     "js-to-ts-converter": "^0.16.3",
     "request": "^2.88.0"
